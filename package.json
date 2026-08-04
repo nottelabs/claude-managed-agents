@@ -1,0 +1,22 @@
+{
+  "name": "notte-managed-agents-cookbook",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Drive the Notte (notte.cc) CLI from Claude Managed Agents, with NOTTE_API_KEY injected via an environment_variable vault credential",
+  "scripts": {
+    "setup": "tsx src/setup.ts",
+    "preflight": "tsx src/preflight.ts",
+    "ux-swarm": "tsx src/ux-swarm.ts",
+    "lead-intel": "tsx src/lead-intel.ts",
+    "teardown": "tsx src/teardown.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.6.0"
+  }
+}
