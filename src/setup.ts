@@ -4,7 +4,7 @@
  * Creates the durable, workspace-scoped infra every recipe reuses:
  *   1. a cloud ENVIRONMENT with the notte CLI go-installed and limited networking
  *   2. a VAULT + environment_variable CREDENTIAL holding NOTTE_API_KEY
- *   3. a custom SKILL uploaded from ./skills/notte-browser
+ *   3. the upstream Notte browser skill uploaded from its Git submodule
  *
  * The created ids are persisted to .notte-agent.json via saveResources() so the
  * recipes (src/ux-swarm.ts, src/lead-intel.ts, ...) can load them.
@@ -25,7 +25,17 @@ import {
   type Resources,
 } from "./config";
 
-const SKILL_DIR = path.join(process.cwd(), "skills", "notte-browser");
+// Keep the skill source tied to nottelabs/notte-skills rather than maintaining
+// a local copy that can drift from the CLI's documented workflow.
+const SKILL_DIR = path.join(
+  process.cwd(),
+  "skills",
+  "notte-skills",
+  "plugins",
+  "notte",
+  "skills",
+  "notte-browser",
+);
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -115,8 +125,8 @@ async function main() {
   });
   console.log(`Credential: ${cred.id}`);
 
-  // 4. SKILL - the notte-browser skill, adapted for this sandbox. Attached to
-  //    both the coordinator and the operators so CLI usage patterns come from a
+  // 4. SKILL - the upstream notte-browser skill. Attached to both the
+  //    coordinator and the operators so CLI usage patterns come from a
   //    versioned skill rather than being inlined in every system prompt.
   let skillId: string | undefined;
   try {

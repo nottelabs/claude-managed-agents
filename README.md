@@ -11,7 +11,7 @@ your API key held in a vault and never exposed to the model.
 | `src/preflight.ts` | Checks the whole integration stage by stage. Run it first. |
 | `src/ux-swarm.ts` | Audits a site's UX. One browser per page, all in parallel. |
 | `src/lead-intel.ts` | Researches a lead: product, pricing, metering, customers, momentum, hiring. One angle per subagent. |
-| `skills/notte-browser/` | A [notte-skills](https://github.com/nottelabs/notte-skills) skill adapted for the sandbox, uploaded and attached to every agent. |
+| `skills/notte-skills/` | Git submodule of the upstream [notte-skills](https://github.com/nottelabs/notte-skills) repository; its `notte-browser` skill is uploaded and attached to every agent. |
 
 You need Node 22+, an `ANTHROPIC_API_KEY` with Managed Agents access, and a
 `NOTTE_API_KEY` from [console.notte.cc](https://console.notte.cc/apikeys).
