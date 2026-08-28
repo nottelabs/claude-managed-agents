@@ -32,7 +32,7 @@ const SKILL_DIR = path.join(
   "skills",
   "notte-skills",
   "plugins",
-  "notte-cli",
+  "notte",
   "skills",
   "notte-browser",
 );
