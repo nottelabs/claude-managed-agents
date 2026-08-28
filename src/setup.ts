@@ -36,6 +36,7 @@ const SKILL_DIR = path.join(
   "skills",
   "notte-browser",
 );
+const SKILL_TITLE = "Notte browser CLI";
 
 function requireEnv(name: string): string {
   const value = process.env[name];
@@ -68,6 +69,23 @@ async function skillFiles(dir: string): Promise<Uploadable[]> {
   }
   await walk(dir);
   return out;
+}
+
+/** Create the cookbook skill once, then upload later source changes as versions. */
+async function uploadSkill(files: Uploadable[]): Promise<string> {
+  for await (const existing of client.beta.skills.list()) {
+    if (existing.display_title !== SKILL_TITLE) continue;
+    const version = await client.beta.skills.versions.create(existing.id, { files });
+    console.log(`Skill: ${existing.id} (version ${version.version}, ${files.length} file(s))`);
+    return existing.id;
+  }
+
+  const skill = await client.beta.skills.create({
+    display_title: SKILL_TITLE,
+    files,
+  });
+  console.log(`Skill: ${skill.id} (${files.length} file(s))`);
+  return skill.id;
 }
 
 async function main() {
@@ -131,12 +149,7 @@ async function main() {
   let skillId: string | undefined;
   try {
     const files = await skillFiles(SKILL_DIR);
-    const skill = await client.beta.skills.create({
-      display_title: "Notte browser CLI",
-      files,
-    });
-    skillId = skill.id;
-    console.log(`Skill: ${skill.id} (${files.length} file(s))`);
+    skillId = await uploadSkill(files);
   } catch (err) {
     console.error(
       `\nSkill upload failed (continuing without it - recipes still work, ` +
